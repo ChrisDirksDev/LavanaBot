@@ -3,25 +3,34 @@ import { Client } from "discord.js";
 import config from "../config.json";
 
 
-let client: Client;
+export class LevanaBot {
+  client: Client | undefined;
 
-const initClient = () => {
-  client = new Client();
-  
-  client.on("ready", () => {
-    console.log(`Logged in as ${client.user?.username}!`);
-  });
-  
-  client.login(config.token).then(async (res: string) => {
-    if (res != undefined) {
-      await sleep(60000)();
-      initClient();
-    }
-  });
+  constructor() {
+    this.client;
+  }
 
+  run = () => {
+    this.initClient();
+  }
+
+
+  initClient = () => {
+    this.client = new Client();
+
+    this.client.on("ready", () => {
+      console.log(`Logged in as ${this.client?.user?.username}!`);
+    });
+
+    this.client.login(config.token).then(async (res: string) => {
+      if (res != undefined) {
+        await sleep(60000)();
+        this.initClient();
+      }
+    });
+  };
 }
 
-initClient();
 
 //#region Util Functions
 const sleep = (duration: number) => {
